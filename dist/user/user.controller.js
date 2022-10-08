@@ -21,7 +21,9 @@ let UserController = class UserController {
         this.usersService = usersService;
     }
     signup(body) {
-        return this.usersService.signup(body.email, body.password);
+        console.log(body);
+        const { email, password, isAdmin } = body;
+        return this.usersService.signup(email, password, isAdmin);
     }
     signin(body) {
         const { email, password } = body;
@@ -73,6 +75,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "deleteAll", null);
 UserController = __decorate([
+    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);

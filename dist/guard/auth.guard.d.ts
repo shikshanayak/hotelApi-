@@ -1,5 +1,10 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { User } from 'src/user/user.entity';
+import { Repository } from 'typeorm';
+import { UserService } from 'src/user/user.service';
 export declare class AuthGuard implements CanActivate {
-    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean>;
+    private readonly userrepo;
+    private readonly usersService;
+    constructor(userrepo: Repository<User>, usersService: UserService);
+    canActivate(context: ExecutionContext): Promise<boolean>;
 }

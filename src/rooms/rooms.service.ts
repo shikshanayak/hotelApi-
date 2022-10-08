@@ -1,5 +1,6 @@
 import { Injectable , UnauthorizedException, BadRequestException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { userInfo } from 'os';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { CreateRoomDto } from './dtos/create-room.dto';
@@ -11,25 +12,38 @@ export class RoomsService {
     constructor(@InjectRepository(Rooms) private readonly roomsRepo: Repository<Rooms>){}
 
     async addRoom(createRoomDto : CreateRoomDto, user){
-        const exitingroom = this.roomsRepo.findOne({where: {roomno: createRoomDto.roomno}});
+            const exitingroom = await this.roomsRepo.findOne({where: {roomno: createRoomDto.roomno}});
+        
             if(exitingroom) throw new BadRequestException("this room no already exist")
             const room =  this.roomsRepo.create(createRoomDto);
-            room.user = user.sub
-            room.IsAvailable = true;
+            room.user = user;
+            console.log(room.user);
+            
+            room.IsAvailable = "available";
             
             return this.roomsRepo.save(room)
         
     }
-    async getrooms(){
+
+//    async  getrooms(){
+//         const availableRoom = await  this.roomsRepo.find({where: {IsAvailable: 'available'}})
+//         console.log(availableRoom);
         
-        return await this.roomsRepo.find();
-    }
+//         if(!availableRoom ) throw new BadRequestException("all rooms are booked")
+//         return  availableRoom;
+//     }
     
     
-    async updateRoom(id: number, data: Partial<Rooms>){
+    async updateRoom(id: number, data: Partial<Rooms>, user){
         const index = await this.roomsRepo.findOne({where: {id}});
+        
+        console.log("index",index);
+        
         if(!index) throw new BadRequestException("user with id not found");
-         Object.assign(index, data)
+        index.user = user;
+        Object.assign(index, data)
+        console.log(index);
+        
         return this.roomsRepo.save(index )
 
     }

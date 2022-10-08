@@ -23,7 +23,11 @@ __decorate([
     __metadata("design:type", Number)
 ], Booking.prototype, "roomno", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, user => user),
+    (0, typeorm_1.Column)({ default: 'available' }),
+    __metadata("design:type", String)
+], Booking.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, user => user, { cascade: true, eager: true }),
     __metadata("design:type", user_entity_1.User)
 ], Booking.prototype, "user", void 0);
 Booking = __decorate([

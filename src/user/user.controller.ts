@@ -1,14 +1,20 @@
-import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserService } from './user.service';
 
+
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
     constructor(private readonly usersService: UserService){}
 
     @Post('/signup')
+    
     signup(@Body() body: CreateUserDto){
-        return this.usersService.signup(body.email, body.password)
+        console.log(body);
+        const {email, password, isAdmin} = body;
+        // const isAdmin = isadmin === true ? true : false;
+        return this.usersService.signup(email, password, isAdmin);
     }
 
     @Post('/signin')

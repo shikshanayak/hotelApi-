@@ -6,12 +6,15 @@ import { Column, Entity, PrimaryGeneratedColumn , ManyToOne} from "typeorm";
 export class Booking{
     @PrimaryGeneratedColumn()
     id: number;
-
-    // @Column('simple-array')
-    // roomno: [];
+    
     @Column()
-    roomno: number
+    roomno: number;
 
-    @ManyToOne(() => User, user => user )
+    @Column({default: 'available'})
+    status: string;
+
+    @ManyToOne(() => User, user => user , {cascade: true, eager : true})
     user: User
 }
+
+// {default: () => "CURRENT_TIMESTAMP"}

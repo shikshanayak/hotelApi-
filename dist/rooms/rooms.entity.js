@@ -23,15 +23,15 @@ __decorate([
     __metadata("design:type", Number)
 ], Rooms.prototype, "roomno", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ default: true }),
-    __metadata("design:type", Boolean)
+    (0, typeorm_1.Column)({ default: "available" }),
+    __metadata("design:type", String)
 ], Rooms.prototype, "IsAvailable", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Rooms.prototype, "price", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.rooms),
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.rooms, { cascade: true, eager: true }),
     __metadata("design:type", user_entity_1.User)
 ], Rooms.prototype, "user", void 0);
 Rooms = __decorate([

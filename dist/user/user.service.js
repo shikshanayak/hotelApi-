@@ -19,10 +19,13 @@ const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./user.entity");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const rooms_entity_1 = require("../rooms/rooms.entity");
 let UserService = class UserService {
-    constructor(repo) {
+    constructor(repo, roomsrepo) {
         this.repo = repo;
+        this.roomsrepo = roomsrepo;
     }
+    ;
     async hashPassword(password) {
         const saltOrRounds = 10;
         password = 'random_password';
@@ -33,13 +36,13 @@ let UserService = class UserService {
         const isMatch = await bcrypt.compare(password, hashPassword);
         return isMatch;
     }
-    async signup(email, password) {
+    async signup(email, password, isAdmin) {
         const existingEmail = await this.repo.findOne({ where: { email } });
-        console.log(existingEmail);
         if (existingEmail)
             throw new common_1.BadRequestException("email already exist");
         const hashedpassword = await this.hashPassword(password);
-        const user = this.repo.create({ email, password: hashedpassword });
+        const user = this.repo.create({ email, password: hashedpassword, isAdmin: isAdmin });
+        console.log(user);
         return await this.repo.save(user);
     }
     async signin(email, password) {
@@ -50,9 +53,8 @@ let UserService = class UserService {
         if (ispasswordMatched)
             throw new common_1.BadRequestException("password is not matched");
         if (existingUser) {
-            return { accessToken: jwt.sign({ sub: existingUser.id, email: existingUser.email }, 'super_secret', { expiresIn: '5d' }) };
+            return { accessToken: jwt.sign({ sub: existingUser.id, email: existingUser.email, }, 'super_secret', { expiresIn: '365d' }) };
         }
-        console.log(existingUser);
         return existingUser;
     }
     async UpdateUser(id, data) {
@@ -61,6 +63,15 @@ let UserService = class UserService {
             throw new common_1.BadRequestException("user with this email not found");
         Object.assign(index, data);
         return this.repo.save(data);
+    }
+    async findUserByEmail(email) {
+        try {
+            const existingUser = await this.repo.findOne({ where: { email } });
+            return existingUser;
+        }
+        catch (error) {
+            return null;
+        }
     }
     async deleteUserById(id) {
         const index = await this.repo.findOne({ where: { id } });
@@ -75,7 +86,9 @@ let UserService = class UserService {
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(rooms_entity_1.Rooms)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

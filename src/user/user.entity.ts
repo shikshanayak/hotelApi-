@@ -1,7 +1,7 @@
 
 import { Rooms } from "src/rooms/rooms.entity";
 import { Column, Entity, PrimaryGeneratedColumn , OneToMany} from "typeorm";
-
+import { Exclude } from "class-transformer";
 
   
 @Entity()
@@ -13,9 +13,11 @@ export class User{
     email: string;
 
     @Column()
+    @Exclude()
     password: string;
 
     @Column({default: false })
+    @Exclude()
     isAdmin: Boolean
 
     @OneToMany(() => Rooms, (rooms) => rooms.roomno)

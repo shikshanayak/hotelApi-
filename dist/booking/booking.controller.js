@@ -14,36 +14,71 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookingController = void 0;
 const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const auth_guard_1 = require("../guard/auth.guard");
+const user_entity_1 = require("../user/user.entity");
+const typeorm_2 = require("typeorm");
 const booking_service_1 = require("./booking.service");
 let BookingController = class BookingController {
-    constructor(service) {
+    constructor(service, userService) {
         this.service = service;
+        this.userService = userService;
     }
-    bookRoomByUser(body) {
+    bookRoomByUser(body, req) {
+        console.log(req.user);
+        const user = req.user;
         const { roomno } = body;
-        return this.service.bookRoomByUser(parseInt(roomno));
+        return this.service.bookRoomByUser(parseInt(roomno), user);
     }
-    cancelRoom(id) {
-        const index = this.service.cancelRoom(parseInt(id));
+    getAllHistory(req) {
+        const user = req.user;
+        return this.service.getHistoryByUser(user);
+    }
+    getAllrooms(req) {
+        const user = req.user;
+        return this.service.getAllrooms(user);
+    }
+    checkout(req) {
+        const user = req.user;
+        return this.service.checkout(user);
     }
 };
 __decorate([
     (0, common_1.Post)('/bookroom'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], BookingController.prototype, "bookRoomByUser", null);
 __decorate([
-    (0, common_1.Delete)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)('/:id'),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], BookingController.prototype, "cancelRoom", null);
+], BookingController.prototype, "getAllHistory", null);
+__decorate([
+    (0, common_1.Get)('/getallroomsbyuser'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], BookingController.prototype, "getAllrooms", null);
+__decorate([
+    (0, common_1.Patch)('/checkout/:id'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], BookingController.prototype, "checkout", null);
 BookingController = __decorate([
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.Controller)('booking'),
-    __metadata("design:paramtypes", [booking_service_1.BookingService])
+    __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __metadata("design:paramtypes", [booking_service_1.BookingService,
+        typeorm_2.Repository])
 ], BookingController);
 exports.BookingController = BookingController;
 //# sourceMappingURL=booking.controller.js.map

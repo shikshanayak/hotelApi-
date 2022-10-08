@@ -10,13 +10,23 @@ export class Rooms{
     @Column({unique: true})
     roomno: number;
 
-    @Column({default: true})
-    IsAvailable: boolean
+    @Column({default: "available"})
+    IsAvailable: string;
 
     @Column()
-    price: number
+    price: number;
 
-    @ManyToOne(() => User, (user) => user.rooms)
+    @ManyToOne(() => User, (user) => user.rooms, {cascade: true, eager : true})
     user: User
 
 }
+
+// @Column()
+// bookingdate: Date
+
+// @Column()
+// checkin: Date
+
+// @Column()
+// checkout: Date
+    

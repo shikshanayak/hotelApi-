@@ -22,22 +22,23 @@ let RoomsService = class RoomsService {
         this.roomsRepo = roomsRepo;
     }
     async addRoom(createRoomDto, user) {
-        const exitingroom = this.roomsRepo.findOne({ where: { roomno: createRoomDto.roomno } });
+        const exitingroom = await this.roomsRepo.findOne({ where: { roomno: createRoomDto.roomno } });
         if (exitingroom)
             throw new common_1.BadRequestException("this room no already exist");
         const room = this.roomsRepo.create(createRoomDto);
-        room.user = user.sub;
-        room.IsAvailable = true;
+        room.user = user;
+        console.log(room.user);
+        room.IsAvailable = "available";
         return this.roomsRepo.save(room);
     }
-    async getrooms() {
-        return await this.roomsRepo.find();
-    }
-    async updateRoom(id, data) {
+    async updateRoom(id, data, user) {
         const index = await this.roomsRepo.findOne({ where: { id } });
+        console.log("index", index);
         if (!index)
             throw new common_1.BadRequestException("user with id not found");
+        index.user = user;
         Object.assign(index, data);
+        console.log(index);
         return this.roomsRepo.save(index);
     }
     async deleteRoom(id) {

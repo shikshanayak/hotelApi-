@@ -10,7 +10,9 @@ exports.BookingModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const rooms_entity_1 = require("../rooms/rooms.entity");
+const rooms_module_1 = require("../rooms/rooms.module");
 const user_entity_1 = require("../user/user.entity");
+const user_module_1 = require("../user/user.module");
 const booking_controller_1 = require("./booking.controller");
 const booking_entity_1 = require("./booking.entity");
 const booking_service_1 = require("./booking.service");
@@ -18,7 +20,7 @@ let BookingModule = class BookingModule {
 };
 BookingModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, rooms_entity_1.Rooms, booking_entity_1.Booking])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([rooms_entity_1.Rooms, user_entity_1.User, booking_entity_1.Booking]), rooms_module_1.RoomsModule, user_module_1.UserModule],
         controllers: [booking_controller_1.BookingController],
         providers: [booking_service_1.BookingService],
         exports: [booking_service_1.BookingService]
