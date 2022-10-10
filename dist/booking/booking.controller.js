@@ -30,13 +30,9 @@ let BookingController = class BookingController {
         const { roomno } = body;
         return this.service.bookRoomByUser(parseInt(roomno), user);
     }
-    getAllHistory(req) {
-        const user = req.user;
-        return this.service.getHistoryByUser(user);
-    }
     getAllrooms(req) {
-        const user = req.user;
-        return this.service.getAllrooms(user);
+        const user = req.user.IsAvailable;
+        return this.service.getAllAvailablerooms(user);
     }
     checkout(req) {
         const user = req.user;
@@ -51,13 +47,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], BookingController.prototype, "bookRoomByUser", null);
-__decorate([
-    (0, common_1.Get)('/:id'),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], BookingController.prototype, "getAllHistory", null);
 __decorate([
     (0, common_1.Get)('/getallroomsbyuser'),
     __param(0, (0, common_1.Request)()),

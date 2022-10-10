@@ -6,7 +6,6 @@ export declare class BookingController {
     private readonly userService;
     constructor(service: BookingService, userService: Repository<User>);
     bookRoomByUser(body: any, req: any): Promise<import("./booking.entity").Booking>;
-    getAllHistory(req: any): Promise<import("./booking.entity").Booking[]>;
     getAllrooms(req: any): Promise<import("./booking.entity").Booking[]>;
     checkout(req: any): Promise<import("./booking.entity").Booking>;
 }

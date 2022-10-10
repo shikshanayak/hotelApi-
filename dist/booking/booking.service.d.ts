@@ -8,7 +8,6 @@ export declare class BookingService {
     private readonly roomrepo;
     constructor(bookingrepo: Repository<Booking>, userrepo: Repository<User>, roomrepo: Repository<Rooms>);
     bookRoomByUser(roomno: number, user: any): Promise<Booking>;
-    getHistoryByUser(user: any): Promise<Booking[]>;
-    getAllrooms(user: any): Promise<Booking[]>;
+    getAllAvailablerooms(user: any): Promise<Booking[]>;
     checkout(user: any): Promise<Booking>;
 }

@@ -36,14 +36,7 @@ let BookingService = class BookingService {
         existingRoom.IsAvailable = "booked";
         return this.bookingrepo.save(roomnonew);
     }
-    async getHistoryByUser(user) {
-        const existingAllbooking = await this.bookingrepo.find({ where: { user: user } });
-        console.log(existingAllbooking);
-        if (!existingAllbooking)
-            throw new common_2.BadRequestException('room no with this id not booked ');
-        return existingAllbooking;
-    }
-    async getAllrooms(user) {
+    async getAllAvailablerooms(user) {
         const availableRoom = await this.roomrepo.find({ where: { user: user } });
         if (!availableRoom)
             throw new common_2.BadRequestException("all rooms are booked");

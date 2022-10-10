@@ -28,12 +28,12 @@ export class BookingService {
         return this.bookingrepo.save(roomnonew)
     }
 
-    async getHistoryByUser(user){  
-        const existingAllbooking = await this.bookingrepo.find({where: {user: user}});
-        console.log(existingAllbooking);
-        if(!existingAllbooking) throw new BadRequestException('room no with this id not booked ');
-        return existingAllbooking;
-    }
+    // async getHistoryByUser(user){  
+    //     const existingAllbooking = await this.bookingrepo.find({where: {user: user}});
+    //     console.log(existingAllbooking);
+    //     if(!existingAllbooking) throw new BadRequestException('room no with this id not booked ');
+    //     return existingAllbooking;
+    // }
 
     async getAllAvailablerooms(user){
         const availableRoom = await this.roomrepo.find({where: {user: user}});

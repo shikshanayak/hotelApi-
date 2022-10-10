@@ -20,23 +20,21 @@ export class BookingController {
     @Post('/bookroom')
     bookRoomByUser(@Body() body: any, @Request() req: any){     //working route
         console.log(req.user);
-        
         const user = req.user;
         const { roomno } = body;
         return this.service.bookRoomByUser(parseInt(roomno), user);
     }
 
-
     
-    @Get('/:id')
-    getAllHistory( @Request() req: any){
-        const user = req.user;
-        return this.service.getHistoryByUser( user)
-    }
+    // @Get('/:id')
+    // getAllHistory( @Request() req: any){
+    //     const user = req.user;
+    //     return this.service.getHistoryByUser( user)
+    // }
 
     @Get('/getallroomsbyuser')
     getAllrooms(@Request() req: any){
-        const user = req.user.IsAvailable
+        const user = req.user.IsAvailable;
         return this.service.getAllAvailablerooms(user)
     }
 
